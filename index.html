@@ -3,94 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liyash Graphics | Permanent Storage</title>
+    <title>Liyash Graphics | Free PSD</title>
     <style>
-        :root { --primary: #00d4ff; --bg: #0f0f0f; --card-bg: #1a1a1a; --text: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
-        .card { background: var(--card-bg); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
-        .btn { display: inline-block; background: var(--primary); color: #000; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; cursor: pointer; border:none; }
-        #adminArea { display:none; margin-top:50px; padding:20px; border:1px dashed var(--primary); }
-        input { padding:10px; margin:5px; border-radius:5px; width:80%; }
-        .support { background: #1a1a1a; padding: 20px; margin-top: 40px; text-align: center; border-radius: 10px; }
+        :root { --primary: #00d4ff; --bg: #121212; --card-bg: #1e1e1e; --text: #ffffff; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; text-align: center; }
+        header { padding: 40px; background: #000; border-bottom: 2px solid var(--primary); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid #333; }
+        .btn { display: inline-block; background: var(--primary); color: #000; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; }
+        #adminArea { display:none; margin: 40px; padding: 20px; border: 1px dashed var(--primary); }
+        input { padding: 10px; margin: 10px; width: 250px; border-radius: 5px; border: none; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>LIYASH GRAPHICS</h1>
-    <p>Free PSD Downloads - Direct Access</p>
+    <p>Premium PSDs - 100% Free</p>
 </header>
 
 <div class="grid" id="displayList">
-    <p>Loading files...</p>
+    <p>Loading files from Liyash's Database...</p>
 </div>
 
-<div class="support">
-    <h3>Support & Feedback</h3>
-    <p>WhatsApp: 8248399579 | liyashgraphics@gmail.com</p>
+<div style="background:#1a1a1a; padding: 20px; margin-top: 20px;">
+    <h3>Support: 8248399579</h3>
+    <p>Email: liyashgraphics@gmail.com</p>
 </div>
 
-<hr>
-
-<div id="loginSection" style="text-align:center;">
-    <input type="password" id="pass" placeholder="Admin Password (Email)">
+<div id="loginSection" style="margin: 20px;">
+    <input type="password" id="pass" placeholder="Admin Email">
     <button onclick="login()" class="btn">Admin Login</button>
 </div>
 
 <div id="adminArea">
-    <h3>Admin Panel (Liyash Only)</h3>
-    <p>புது ஃபைலை Google Sheet-ல் சேர்த்த பிறகு வெப்சைட்டை Refresh செய்யவும்.</p>
-    <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE" target="_blank" class="btn">Open Database (Google Sheet)</a>
-    <p><i>Note: Google Sheet-ல் நீங்கள் கொடுக்கும் லிங்க் வெப்சைட்டில் தானாக அப்டேட் ஆகும்.</i></p>
+    <h3>Admin Panel</h3>
+    <a href="https://docs.google.com/spreadsheets/d/1u-RrAgsz7l6Fzhsa8DBiYz8MXrRuayQCNbxPpJVdG2Y/edit" target="_blank" class="btn">Edit Files in Google Sheet</a>
+    <p>ஷீட்டில் மாற்றம் செய்த பின் வெப்சைட்டை Refresh செய்யவும்.</p>
 </div>
 
 <script>
-    // 1. Google Sheet-லிருந்து டேட்டாவை எடுக்க
-  // 1. Google Sheet-லிருந்து டேட்டாவை எடுக்க (Updated with your ID)
+    // உங்கள் சரியான Google Sheet ID இங்கே இணைக்கப்பட்டுள்ளது
     const sheetID = "1u-RrAgsz7l6Fzhsa8DBiYz8MXrRuayQCNbxPpJVdG2Y";
     const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
     fetch(url)
         .then(res => res.text())
         .then(data => {
-            // Google-ன் JSON Format-ஐ சுத்தப்படுத்துதல்
             const json = JSON.parse(data.substr(47).slice(0, -2));
             const rows = json.table.rows;
             let html = '';
             
-            rows.forEach(row => {
-                // Column A: FileName, Column B: FileLink
-                const fileName = row.c[0] ? row.c[0].v : "Unnamed PSD";
-                const fileLink = row.c[1] ? row.c[1].v : "#";
-                
+            // முதல் வரிசையை (Header) தவிர்த்துவிட்டு மற்றவற்றை எடுக்கும்
+            for(let i=1; i < rows.length; i++) {
+                const name = rows[i].c[0] ? rows[i].c[0].v : "PSD Design";
+                const link = rows[i].c[1] ? rows[i].c[1].v : "#";
                 html += `
                 <div class="card">
-                    <img src="https://via.placeholder.com/250x140/00d4ff/000000?text=PSD+FILE" width="100%">
-                    <h3>${fileName}</h3>
-                    <a href="${fileLink}" target="_blank" class="btn">Download PSD</a>
+                    <img src="https://via.placeholder.com/250x150/00d4ff/000000?text=LIYASH+PSD" width="100%" style="border-radius:5px;">
+                    <h3>${name}</h3>
+                    <a href="${link}" target="_blank" class="btn">Download Now</a>
                 </div>`;
-            });
+            }
             document.getElementById('displayList').innerHTML = html;
         })
-        .catch(err => {
-            document.getElementById('displayList').innerHTML = "<p>Error loading files. Please check Sheet sharing settings.</p>";
+        .catch(() => {
+            document.getElementById('displayList').innerHTML = "Check Google Sheet Sharing Settings (Anyone with link can view).";
         });
 
-    // 2. Admin Login Function
     function login() {
-        const p = document.getElementById('pass').value;
-        if(p === "liyashkara64@gmail.com") {
+        if(document.getElementById('pass').value === "liyashkara64@gmail.com") {
             document.getElementById('adminArea').style.display = "block";
             document.getElementById('loginSection').style.display = "none";
         } else {
-            alert("Wrong Admin Access!");
+            alert("Access Denied!");
         }
     }
 </script>
 
 </body>
-
 </html>
-
