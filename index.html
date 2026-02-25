@@ -48,25 +48,34 @@
 
 <script>
     // 1. Google Sheet-லிருந்து டேட்டாவை எடுக்க
-    const sheetID = "https://docs.google.com/spreadsheets/d/1u-RrAgsz7l6Fzhsa8DBiYz8MXrRuayQCNbxPpJVdG2Y/edit?usp=sharing";
+  // 1. Google Sheet-லிருந்து டேட்டாவை எடுக்க (Updated with your ID)
+    const sheetID = "1u-RrAgsz7l6Fzhsa8DBiYz8MXrRuayQCNbxPpJVdG2Y";
     const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
     fetch(url)
         .then(res => res.text())
         .then(data => {
+            // Google-ன் JSON Format-ஐ சுத்தப்படுத்துதல்
             const json = JSON.parse(data.substr(47).slice(0, -2));
             const rows = json.table.rows;
             let html = '';
             
             rows.forEach(row => {
+                // Column A: FileName, Column B: FileLink
+                const fileName = row.c[0] ? row.c[0].v : "Unnamed PSD";
+                const fileLink = row.c[1] ? row.c[1].v : "#";
+                
                 html += `
                 <div class="card">
                     <img src="https://via.placeholder.com/250x140/00d4ff/000000?text=PSD+FILE" width="100%">
-                    <h3>${row.c[0].v}</h3>
-                    <a href="${row.c[1].v}" target="_blank" class="btn">Download PSD</a>
+                    <h3>${fileName}</h3>
+                    <a href="${fileLink}" target="_blank" class="btn">Download PSD</a>
                 </div>`;
             });
             document.getElementById('displayList').innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('displayList').innerHTML = "<p>Error loading files. Please check Sheet sharing settings.</p>";
         });
 
     // 2. Admin Login Function
@@ -84,3 +93,4 @@
 </body>
 
 </html>
+
